@@ -1,4 +1,7 @@
-# README — Examen Final Laravel
+# README — MicroCredit
+
+Application de microcrédit développée avec **Laravel**.
+
 ### Faculté des Sciences Informatiques (FASI) — Université Protestant du Congo (UPC)
 ### Promotion L3 · Année académique 2025–2026
 
@@ -233,7 +236,7 @@ php artisan serve
 | Rôle | Email | Mot de passe |
 |------|-------|--------------|
 | Administrateur | admin@exemple.com | password |
-| Gestionnaire | gestionnaire@exemple.com | password |
+| Agent / Gestionnaire | agent@exemple.com | password |
 | Client | client@exemple.com | password |
 
 > Ces comptes doivent être créés automatiquement par les **Seeders**.
