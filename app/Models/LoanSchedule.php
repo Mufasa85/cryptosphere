@@ -52,6 +52,11 @@ class LoanSchedule extends Model
         return $this->hasMany(Repayment::class, 'loan_schedule_id');
     }
 
+    public function penalties()
+    {
+        return $this->hasMany(Penalty::class, 'loan_schedule_id');
+    }
+
     // ------------------------------------------------------
     // Scopes
     // ------------------------------------------------------

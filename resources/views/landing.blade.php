@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CryptoSphere — Fastest Way to Follow Crypto Markets</title>
+    <title>MicroCredit — Solutions de Microcrédit</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -182,6 +182,15 @@
             box-shadow: 0 0 15px var(--glow-green);
         }
 
+        .logo img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--glow-green);
+        }
+
         .nav-links {
             display: flex;
             align-items: center;
@@ -217,6 +226,8 @@
             background: var(--text-primary);
             border-radius: 2px;
         }
+
+        .mobile-only { display: none; }
 
         /* Hero */
         .hero {
@@ -466,6 +477,85 @@
         .converter-result .label {
             font-size: 0.85rem;
             color: var(--text-secondary);
+        }
+
+        .field-value {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .product-card .crypto-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neon-green), var(--glow-green));
+            color: var(--bg-primary);
+            font-size: 1.8rem;
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(0, 196, 90, 0.4);
+        }
+
+        .product-card .crypto-name {
+            font-size: 1.2rem;
+        }
+
+        .product-card .crypto-symbol {
+            color: var(--neon-green);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .product-card .crypto-price {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .product-card .crypto-change,
+        .product-card .mini-chart {
+            display: none;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .why-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.35s ease;
+        }
+
+        .why-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 30px rgba(0, 196, 90, 0.12);
+            border-color: rgba(0, 196, 90, 0.5);
+        }
+
+        .why-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+            color: var(--neon-green);
+        }
+
+        .why-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .text-center {
+            text-align: center;
         }
 
         /* Deposit */
@@ -738,7 +828,8 @@
         /* Responsive */
         @media (max-width: 992px) {
             .crypto-grid,
-            .features-grid {
+            .features-grid,
+            .why-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
@@ -770,8 +861,12 @@
                 display: flex;
             }
 
-            .nav-actions .btn-secondary {
+            .nav-actions .btn {
                 display: none;
+            }
+
+            .mobile-only {
+                display: list-item;
             }
 
             .hero-grid,
@@ -793,7 +888,8 @@
             }
 
             .crypto-grid,
-            .features-grid {
+            .features-grid,
+            .why-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -831,28 +927,23 @@
     <nav class="navbar glass">
         <div class="container nav-container">
             <a href="#" class="logo">
-                <div class="logo-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L3 7L12 12L21 7L12 2Z" fill="#050B12"/>
-                        <path d="M3 17L12 22L21 17" stroke="#050B12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M3 12L12 17L21 12" stroke="#050B12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                CryptoSphere
+                <img src="{{ asset('logo.png') }}" alt="MicroCredit">
+                MicroCredit
             </a>
 
             <ul class="nav-links" id="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#markets">Markets</a></li>
-                <li><a href="#exchange">Exchange</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#home">Accueil</a></li>
+                <li><a href="#produits">Produits</a></li>
+                <li><a href="#simulateur">Simulateur</a></li>
+                <li><a href="#avantages">Avantages</a></li>
+                <li><a href="#partenaires">Partenaires</a></li>
                 <li><a href="#contact">Contact</a></li>
+                <li class="mobile-only"><a href="{{ route('login') }}" class="btn btn-primary">Connexion</a></li>
             </ul>
 
             <div class="nav-actions">
-                <a href="{{ route('login') }}" class="btn btn-secondary">Login</a>
-                <a href="#" class="btn btn-primary">Connect Wallet</a>
+                <a href="{{ route('login') }}" class="btn btn-secondary">Connexion</a>
+                <a href="{{ route('register') }}" class="btn btn-primary">Inscription</a>
                 <div class="hamburger" id="hamburger">
                     <span></span>
                     <span></span>
@@ -867,19 +958,19 @@
             <div class="hero-content reveal">
                 <div class="badge">
                     <span class="badge-dot"></span>
-                    #1 Crypto Trading Platform
+                    #1 Plateforme de Microcrédit
                 </div>
                 <h1>
-                    FASTEST WAY<br>
-                    TO FOLLOW<br>
-                    <span class="neon">CRYPTO</span> MARKETS
+                    ACCÉDEZ RAPIDEMENT<br>
+                    À DES SOLUTIONS<br>
+                    <span class="neon">DE MICROCRÉDIT</span>
                 </h1>
                 <p>
-                    Trade, invest and manage digital assets through a secure next-generation platform.
+                    Obtenez un financement adapté à vos besoins, gérez vos remboursements et développez vos projets grâce à une plateforme de microfinance moderne, sécurisée et accessible à tous.
                 </p>
                 <div class="hero-actions">
-                    <a href="#markets" class="btn btn-primary">Explore Market</a>
-                    <a href="{{ route('register') }}" class="btn btn-secondary">Get Started</a>
+                    <a href="{{ route('login') }}" class="btn btn-primary">Faire une demande</a>
+                    <a href="#produits" class="btn btn-secondary">Commencer maintenant</a>
                 </div>
             </div>
 
@@ -920,171 +1011,102 @@
         </div>
     </section>
 
-    <section class="section" id="markets">
+    <section class="section" id="produits">
         <div class="container">
             <div class="section-header reveal">
-                <h2>Top Crypto <span class="neon">Now</span></h2>
-                <p>Track the most traded digital assets in real-time with live price action.</p>
+                <h2>Nos Produits de <span class="neon">Crédit</span></h2>
+                <p>Découvrez nos solutions de financement conçues pour accompagner les particuliers, les entrepreneurs et les petites entreprises.</p>
             </div>
 
             <div class="crypto-grid">
                 @php
-                    $coins = [
-                        ['Bitcoin', 'BTC', '64,230.00', '+2.34%', 'up', '#F7931A'],
-                        ['Ethereum', 'ETH', '3,420.50', '+1.85%', 'up', '#627EEA'],
-                        ['Solana', 'SOL', '142.80', '+4.12%', 'up', '#14F195'],
-                        ['XRP', 'XRP', '0.58', '-0.72%', 'down', '#346AA9'],
-                        ['Cardano', 'ADA', '0.45', '+3.05%', 'up', '#0033AD'],
-                        ['Litecoin', 'LTC', '78.40', '+1.10%', 'up', '#345D9D'],
+                    $products = [
+                        ['Prêt Personnel', 'P', '5 000', 'Taux d\'intérêt avantageux'],
+                        ['Prêt Entrepreneurial', 'E', '20 000', 'Financement pour développer votre activité'],
+                        ['Prêt Agricole', 'A', '10 000', 'Soutien aux agriculteurs et coopératives'],
+                        ['Prêt Scolaire', 'S', '8 000', 'Investissez dans l\'éducation de vos enfants'],
+                        ['Prêt Habitat', 'H', '15 000', 'Améliorez ou construisez votre logement'],
+                        ['Crédit Commercial', 'C', '12 000', 'Solution rapide pour les petites entreprises'],
                     ];
                 @endphp
 
-                @foreach($coins as $coin)
-                    <div class="crypto-card reveal">
+                @foreach($products as $product)
+                    <div class="crypto-card product-card reveal">
                         <div class="crypto-header">
-                            <div class="crypto-icon" style="background: {{ $coin[4] === 'up' ? 'rgba(61,255,122,0.1)' : 'rgba(255,107,107,0.1)' }}">
-                                <span style="color: {{ $coin[5] }}; font-weight: 700;">{{ substr($coin[0], 0, 1) }}</span>
+                            <div class="crypto-icon">
+                                <span>{{ $product[1] }}</span>
                             </div>
                             <div>
-                                <div class="crypto-name">{{ $coin[0] }}</div>
-                                <div class="crypto-symbol">{{ $coin[1] }}</div>
+                                <div class="crypto-name">{{ $product[0] }}</div>
+                                <div class="crypto-symbol">Jusqu'à {{ $product[2] }} $</div>
                             </div>
                         </div>
-                        <div class="crypto-price">${{ $coin[2] }}</div>
-                        <div class="crypto-change {{ $coin[4] }}">{{ $coin[4] === 'up' ? '+' : '' }}{{ $coin[3] }}</div>
-                        <svg class="mini-chart" viewBox="0 0 100 40" preserveAspectRatio="none">
-                            <polyline
-                                fill="none"
-                                stroke="{{ $coin[4] === 'up' ? '#3DFF7A' : '#FF6B6B' }}"
-                                stroke-width="2"
-                                points="0,30 15,25 30,28 45,18 60,22 75,10 90,15 100,5"
-                            />
-                        </svg>
-                        <a href="#" class="btn btn-primary">Buy Coin</a>
+                        <div class="crypto-price">{{ $product[3] }}</div>
+                        <div class="crypto-change"></div>
+                        <svg class="mini-chart" viewBox="0 0 100 40" preserveAspectRatio="none"></svg>
+                        <a href="{{ route('login') }}" class="btn btn-primary">Faire une demande</a>
                     </div>
                 @endforeach
             </div>
         </div>
     </section>
 
-    <section class="section" id="exchange">
+    <section class="section" id="simulateur">
         <div class="container calc-grid">
             <div class="calc-info reveal">
-                <h2>Bitcoin Currency <span class="neon">Calculator</span></h2>
-                <p>Convert instantly between crypto and fiat currencies with accurate market rates. Plan your next move with precision.</p>
-                <a href="#" class="btn btn-secondary">Learn More</a>
+                <h2>Simulateur de <span class="neon">Crédit</span></h2>
+                <p>Estimez vos mensualités et choisissez la formule de financement qui correspond à votre budget.</p>
+                <a href="#produits" class="btn btn-secondary">En savoir plus</a>
             </div>
 
             <div class="converter-card reveal">
                 <div class="converter-row">
                     <div class="converter-field">
-                        <label>Amount</label>
-                        <input type="number" value="1.00">
+                        <label>Montant du prêt</label>
+                        <div class="field-value">1 000 $</div>
                     </div>
                     <div class="converter-field">
-                        <label>From</label>
-                        <select>
-                            <option>BTC</option>
-                            <option>ETH</option>
-                            <option>SOL</option>
-                        </select>
+                        <label>Type de prêt</label>
+                        <div class="field-value">Prêt Entrepreneurial</div>
                     </div>
-                </div>
-                <div class="converter-row">
-                    <button class="swap-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#050B12" stroke-width="2.5">
-                            <path d="M7 16V4M7 4L3 8M7 4l4 4"/>
-                            <path d="M17 8v12m0 0l4-4m-4 4l-4-4"/>
-                        </svg>
-                    </button>
                     <div class="converter-field">
-                        <label>To</label>
-                        <select>
-                            <option>USD</option>
-                            <option>EUR</option>
-                            <option>CDF</option>
-                        </select>
+                        <label>Durée</label>
+                        <div class="field-value">12 Mois</div>
                     </div>
                 </div>
                 <div class="converter-result">
-                    <div class="value">$64,230.00</div>
-                    <div class="label">1 BTC ≈ 64,230.00 USD</div>
+                    <div class="value">92,50 $</div>
+                    <div class="label">Mensualité estimée</div>
+                </div>
+                <div class="text-center" style="margin-top:20px;">
+                    <a href="{{ route('login') }}" class="btn btn-primary">Faire une simulation</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="section" id="services">
-        <div class="container deposit-grid">
-            <div class="deposit-info reveal">
-                <h2>Deposit Crypto Earn <span class="neon">Interest</span></h2>
-                <p>Put your digital assets to work. Earn competitive returns while keeping your funds secure and accessible.</p>
-                <ul class="deposit-list">
-                    <li>Secure Storage</li>
-                    <li>Daily Rewards</li>
-                    <li>Instant Withdrawals</li>
-                    <li>High APY Returns</li>
-                </ul>
-                <a href="#" class="btn btn-primary">Learn More</a>
-            </div>
-
-            <div class="deposit-visual reveal">
-                <svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="crystalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#F3D28A"/>
-                            <stop offset="50%" style="stop-color:#C8A24B"/>
-                            <stop offset="100%" style="stop-color:#6B4E12"/>
-                        </linearGradient>
-                        <filter id="crystalGlow">
-                            <feGaussianBlur stdDeviation="10" result="blur"/>
-                            <feMerge>
-                                <feMergeNode in="blur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                    </defs>
-                    <ellipse cx="210" cy="360" rx="130" ry="30" fill="rgba(0,0,0,0.4)" filter="url(#crystalGlow)"/>
-                    <g filter="url(#crystalGlow)">
-                        <polygon points="210,60 330,160 210,360 90,160" fill="url(#crystalGrad)" stroke="#F3D28A" stroke-width="2"/>
-                        <polygon points="210,60 330,160 210,200 90,160" fill="rgba(255,255,255,0.2)"/>
-                        <polygon points="90,160 210,200 210,360" fill="rgba(0,0,0,0.15)"/>
-                        <polygon points="330,160 210,200 210,360" fill="rgba(0,0,0,0.25)"/>
-                    </g>
-                    <circle cx="150" cy="130" r="8" fill="#3DFF7A" filter="url(#crystalGlow)"/>
-                    <circle cx="280" cy="180" r="5" fill="#3DFF7A" filter="url(#crystalGlow)"/>
-                    <circle cx="200" cy="320" r="6" fill="#3DFF7A" filter="url(#crystalGlow)"/>
-                </svg>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="pricing">
+    <section class="section" id="avantages">
         <div class="container">
             <div class="section-header reveal">
-                <h2>Why Choose <span class="neon">CryptoSphere</span></h2>
-                <p>A complete ecosystem built for security, speed and growth.</p>
+                <h2>Financez Vos Projets en <span class="neon">Toute Confiance</span></h2>
+                <p>Accédez à des prêts abordables, bénéficiez de conditions flexibles et profitez d'un accompagnement personnalisé pour atteindre vos objectifs.</p>
             </div>
 
             <div class="features-grid">
                 @php
                     $features = [
-                        ['Value Performance', 'Real-time analytics and portfolio insights to maximize returns.'],
-                        ['Strong Security', 'Bank-grade encryption, 2FA and cold storage for your assets.'],
-                        ['Transparent Fees', 'No hidden costs. Every fee is clearly displayed before you trade.'],
-                        ['Fast Transactions', 'Execute orders in milliseconds with low latency infrastructure.'],
-                        ['Smart Analytics', 'Advanced charts, indicators and AI-powered market signals.'],
-                        ['Global Access', 'Trade from anywhere with support for multiple currencies.'],
+                        ['Approbation rapide', 'Décision rapide sur votre demande.'],
+                        ['Taux d\'intérêt compétitifs', 'Conditions avantageuses adaptées à votre profil.'],
+                        ['Remboursement flexible', 'Des échéances qui s\'adaptent à votre budget.'],
+                        ['Transactions sécurisées', 'Vos données et paiements sont protégés.'],
                     ];
                 @endphp
 
                 @foreach($features as $feature)
                     <div class="feature-card reveal">
                         <div class="feature-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                <path d="M2 17l10 5 10-5"/>
-                                <path d="M2 12l10 5 10-5"/>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
                         </div>
                         <h3>{{ $feature[0] }}</h3>
@@ -1092,12 +1114,50 @@
                     </div>
                 @endforeach
             </div>
+
+            <div class="text-center reveal" style="margin-top: 30px;">
+                <a href="#produits" class="btn btn-primary">En savoir plus</a>
+            </div>
         </div>
     </section>
 
-    <section class="partners">
+    <section class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Pourquoi Choisir <span class="neon">MicroCredit</span> ?</h2>
+                <p>Une plateforme de microfinance conçue pour favoriser l'inclusion financière, la croissance économique et l'autonomisation des communautés.</p>
+            </div>
+
+            <div class="why-grid">
+                @php
+                    $reasons = [
+                        ['Inclusion Financière', 'Des solutions accessibles aux particuliers, commerçants et entrepreneurs.'],
+                        ['Sécurité Renforcée', 'Protection avancée des données et des transactions financières.'],
+                        ['Transparence Totale', 'Aucun frais caché. Toutes les conditions sont clairement présentées.'],
+                        ['Traitement Rapide', 'Analyse et validation des demandes dans les meilleurs délais.'],
+                        ['Suivi Intelligent', 'Visualisez vos crédits, remboursements et échéances en temps réel.'],
+                        ['Développement Communautaire', 'Nous soutenons les initiatives locales et les projets créateurs de valeur.'],
+                    ];
+                @endphp
+
+                @foreach($reasons as $reason)
+                    <div class="why-card reveal">
+                        <h3>{{ $reason[0] }}</h3>
+                        <p>{{ $reason[1] }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="partenaires">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2>Nos <span class="neon">Partenaires</span></h2>
+            </div>
+        </div>
         <div class="partners-track">
-            @foreach(['Visa', 'PayPal', 'Mastercard', 'Binance', 'Coinbase', 'Stripe', 'Visa', 'PayPal', 'Mastercard', 'Binance', 'Coinbase', 'Stripe'] as $logo)
+            @foreach(['Banques', 'Institutions de Microfinance', 'Coopératives', 'ONG', 'Organisations de Développement', 'Partenaires Financiers', 'Banques', 'Institutions de Microfinance', 'Coopératives', 'ONG', 'Organisations de Développement', 'Partenaires Financiers'] as $logo)
                 <div class="partner-logo">{{ $logo }}</div>
             @endforeach
         </div>
@@ -1106,8 +1166,8 @@
     <section class="section" id="contact">
         <div class="container">
             <div class="cta-section reveal">
-                <h2>Install CryptoHub App <span class="neon">Today</span></h2>
-                <p>Manage your portfolio, track markets and trade on the go with our next-generation mobile application.</p>
+                <h2>Téléchargez l'Application <span class="neon">MicroCredit</span></h2>
+                <p>Effectuez vos demandes de prêt, consultez vos échéances et gérez vos remboursements où que vous soyez grâce à notre application mobile.</p>
                 <div class="cta-actions">
                     <a href="#" class="btn btn-primary">Google Play</a>
                     <a href="#" class="btn btn-secondary">App Store</a>
@@ -1121,59 +1181,53 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <a href="#" class="logo">
-                        <div class="logo-icon">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 2L3 7L12 12L21 7L12 2Z" fill="#050B12"/>
-                                <path d="M3 17L12 22L21 17" stroke="#050B12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M3 12L12 17L21 12" stroke="#050B12" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        CryptoSphere
+                        <div class="logo-icon">M</div>
+                        MicroCredit
                     </a>
-                    <p>The fastest way to follow crypto markets. Secure, modern and built for the future of finance.</p>
+                    <p>La solution moderne pour financer vos projets, développer votre activité et améliorer votre qualité de vie grâce à un accès simple, rapide et sécurisé au crédit.</p>
                 </div>
 
                 <div class="footer-links">
-                    <h4>Company</h4>
+                    <h4>Entreprise</h4>
                     <ul>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="#">Press</a></li>
+                        <li><a href="#">À propos</a></li>
+                        <li><a href="#">Carrières</a></li>
+                        <li><a href="#">Presse</a></li>
                         <li><a href="#">Blog</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-links">
-                    <h4>Product</h4>
+                    <h4>Produits</h4>
                     <ul>
-                        <li><a href="#">Exchange</a></li>
-                        <li><a href="#">Wallet</a></li>
-                        <li><a href="#">Earn</a></li>
-                        <li><a href="#">NFT</a></li>
+                        <li><a href="#">Prêts</a></li>
+                        <li><a href="#">Investissement</a></li>
+                        <li><a href="#">Assurance</a></li>
+                        <li><a href="#">Conseil</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-links">
-                    <h4>Resources</h4>
+                    <h4>Ressources</h4>
                     <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">API Docs</a></li>
-                        <li><a href="#">Status</a></li>
-                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Centre d'aide</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Statut</a></li>
+                        <li><a href="#">Communauté</a></li>
                     </ul>
                 </div>
 
                 <div class="newsletter">
-                    <h4>Subscribe to our newsletter</h4>
+                    <h4>Abonnez-vous à notre newsletter</h4>
                     <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Merci pour votre inscription !');">
-                        <input type="email" placeholder="Enter your email" required>
-                        <button type="submit">Send</button>
+                        <input type="email" placeholder="Entrez votre email" required>
+                        <button type="submit">Envoyer</button>
                     </form>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                © 2026 CryptoSphere. All rights reserved.
+                © 2026 MicroCredit. Tous droits réservés.
             </div>
         </div>
     </footer>

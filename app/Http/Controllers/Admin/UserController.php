@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -42,6 +43,8 @@ class UserController extends Controller
     {
         $user->update(['is_active' => ! $user->is_active]);
 
+        ActivityLog::record('user.toggled', $user, 'Compte ' . ($user->is_active ? 'activé' : 'désactivé'));
+
         return back()->with('success', 'Statut du compte mis à jour.');
     }
 
@@ -52,6 +55,8 @@ class UserController extends Controller
         }
 
         $user->delete();
+
+        ActivityLog::record('user.deleted', null, 'Utilisateur ' . $user->email . ' supprimé');
 
         return redirect()->route('admin.users.index')->with('success', 'Utilisateur supprimé.');
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Agent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ValidateLoanRequest;
 use App\Mail\LoanStatusChangedMail;
+use App\Models\ActivityLog;
 use App\Models\LoanApplication;
 use App\Services\LoanService;
 use Illuminate\Http\Request;
@@ -35,6 +36,7 @@ class ValidationController extends Controller
     {
         $this->loanService->approve($loan, $request->validated());
 
+        ActivityLog::record('loan.approved', $loan, 'Dossier approuvé');
         Mail::to($loan->user)->queue(new LoanStatusChangedMail($loan, 'approved'));
 
         return redirect()->route('agent.validations.index')
@@ -49,6 +51,7 @@ class ValidationController extends Controller
 
         $this->loanService->reject($loan, $data['rejection_reason']);
 
+        ActivityLog::record('loan.rejected', $loan, 'Dossier rejeté : ' . $data['rejection_reason']);
         Mail::to($loan->user)->queue(new LoanStatusChangedMail($loan, 'rejected'));
 
         return redirect()->route('agent.validations.index')
@@ -63,6 +66,7 @@ class ValidationController extends Controller
 
         $this->loanService->disburse($loan);
 
+        ActivityLog::record('loan.disbursed', $loan, 'Crédit décaissé');
         Mail::to($loan->user)->queue(new LoanStatusChangedMail($loan, 'disbursed'));
 
         return redirect()->route('agent.validations.index')

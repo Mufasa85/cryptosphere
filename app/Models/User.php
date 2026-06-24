@@ -79,6 +79,16 @@ class User extends Authenticatable
         return $this->hasMany(Repayment::class, 'user_id');
     }
 
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class, 'user_id')->latest();
+    }
+
+    public function loginHistories()
+    {
+        return $this->hasMany(LoginHistory::class, 'user_id')->latest();
+    }
+
     // ------------------------------------------------------
     // Scopes & accessseurs utiles
     // ------------------------------------------------------

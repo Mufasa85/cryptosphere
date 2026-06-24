@@ -72,6 +72,11 @@ class Repayment extends Model
         return $this->hasOne(Transaction::class, 'repayment_id')->latestOfMany();
     }
 
+    public function penalties()
+    {
+        return $this->hasMany(Penalty::class, 'repayment_id');
+    }
+
     // ------------------------------------------------------
     // Scopes
     // ------------------------------------------------------

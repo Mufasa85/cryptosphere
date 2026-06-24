@@ -1,13 +1,20 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController as AdminAccountController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\FinancialController as AdminFinancialController;
 use App\Http\Controllers\Admin\LoanApplicationController as AdminLoanApplicationController;
+use App\Http\Controllers\Admin\LoanProductController as AdminLoanProductController;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\Admin\SecurityController as AdminSecurityController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Agent\ClientController as AgentClientController;
 use App\Http\Controllers\Agent\DashboardController as AgentDashboardController;
 use App\Http\Controllers\Agent\LoanController as AgentLoanController;
+use App\Http\Controllers\Agent\ProfileController as AgentProfileController;
 use App\Http\Controllers\Agent\RepaymentController as AgentRepaymentController;
+use App\Http\Controllers\Agent\ReportController as AgentReportController;
 use App\Http\Controllers\Agent\ValidationController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
@@ -71,6 +78,15 @@ Route::middleware(['auth', 'account.active', 'role:agent'])
         Route::get('loans', [AgentLoanController::class, 'index'])->name('loans.index');
         Route::get('loans/{loan}', [AgentLoanController::class, 'show'])->name('loans.show');
         Route::get('repayments', [AgentRepaymentController::class, 'index'])->name('repayments.index');
+        Route::get('repayments/collect', [AgentRepaymentController::class, 'create'])->name('repayments.create');
+        Route::post('repayments', [AgentRepaymentController::class, 'store'])->name('repayments.store');
+
+        Route::get('reports/daily', [AgentReportController::class, 'daily'])->name('reports.daily');
+        Route::get('reports/monthly', [AgentReportController::class, 'monthly'])->name('reports.monthly');
+
+        Route::get('profile', [AgentProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('profile', [AgentProfileController::class, 'update'])->name('profile.update');
+        Route::patch('profile/two-factor', [AgentProfileController::class, 'toggleTwoFactor'])->name('profile.two-factor');
     });
 
 // Espace administrateur
@@ -82,5 +98,30 @@ Route::middleware(['auth', 'account.active', 'role:admin'])
         Route::resource('users', UserController::class)->only(['index', 'show', 'destroy']);
         Route::patch('users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
         Route::resource('loans', AdminLoanApplicationController::class)->only(['index', 'show']);
+
+        // Gestion financière
+        Route::get('financial', [AdminFinancialController::class, 'index'])->name('financial.index');
+        Route::get('financial/disbursements', [AdminFinancialController::class, 'disbursements'])->name('financial.disbursements');
+        Route::get('financial/repayments', [AdminFinancialController::class, 'repayments'])->name('financial.repayments');
+        Route::get('financial/penalties', [AdminFinancialController::class, 'penalties'])->name('financial.penalties');
+        Route::get('financial/revenue', [AdminFinancialController::class, 'revenue'])->name('financial.revenue');
+
+        // Paramètres
+        Route::resource('settings/loan-products', AdminLoanProductController::class)->names('settings.loan-products');
+        Route::get('settings/system', [AdminSettingController::class, 'index'])->name('settings.index');
+        Route::put('settings/system', [AdminSettingController::class, 'update'])->name('settings.update');
+
+        // Rapports
         Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('reports/credits', [ReportController::class, 'credits'])->name('reports.credits');
+        Route::get('reports/financial', [ReportController::class, 'financial'])->name('reports.financial');
+
+        // Sécurité
+        Route::get('security/activity-logs', [AdminSecurityController::class, 'activityLogs'])->name('security.activity-logs');
+        Route::get('security/login-histories', [AdminSecurityController::class, 'loginHistories'])->name('security.login-histories');
+
+        // Mon compte
+        Route::get('account/profile', [AdminAccountController::class, 'profile'])->name('account.profile');
+        Route::put('account/profile', [AdminAccountController::class, 'updateProfile'])->name('account.update');
+        Route::patch('account/two-factor', [AdminAccountController::class, 'toggleTwoFactor'])->name('account.two-factor');
     });

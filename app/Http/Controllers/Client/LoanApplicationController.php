@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreLoanApplicationRequest;
 use App\Mail\LoanStatusChangedMail;
+use App\Models\ActivityLog;
 use App\Models\LoanApplication;
 use App\Services\LoanService;
 use Illuminate\Http\Request;
@@ -40,6 +41,8 @@ class LoanApplicationController extends Controller
             'status' => 'submitted',
             'submitted_at' => now(),
         ]);
+
+        ActivityLog::record('loan.submitted', $loan, 'Demande de crédit soumise');
 
         return redirect()->route('client.loans.show', $loan)
             ->with('success', 'Votre demande de crédit a été soumise.');

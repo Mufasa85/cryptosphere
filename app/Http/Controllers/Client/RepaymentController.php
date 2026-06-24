@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\LoanApplication;
 use App\Models\Repayment;
 use App\Services\MobileMoney\LabPayService;
@@ -79,6 +80,7 @@ class RepaymentController extends Controller
 
             if ($gateway->isSuccess($response)) {
                 $this->repaymentService->confirm($repayment);
+                ActivityLog::record('repayment.confirmed', $repayment, 'Remboursement confirmé');
             }
 
             return $repayment;

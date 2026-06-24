@@ -27,7 +27,7 @@ class ReportService
 
     public function monthlyLoanVolume(): array
     {
-        return LoanApplication::selectRaw("strftime('%Y-%m', submitted_at) as month, count(*) as count, sum(amount_requested) as amount")
+        return LoanApplication::selectRaw("DATE_FORMAT(submitted_at, '%Y-%m') as month, count(*) as count, sum(amount_requested) as amount")
             ->whereNotNull('submitted_at')
             ->groupBy('month')
             ->orderBy('month')
