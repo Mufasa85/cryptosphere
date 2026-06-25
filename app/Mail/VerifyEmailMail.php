@@ -13,22 +13,32 @@ class VerifyEmailMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public User $user) {}
+    public $user;
+    public $verificationUrl;
+
+    public function __construct(User $user, ?string $verificationUrl = null)
+    {
+        $this->user = $user;
+        $this->verificationUrl = $verificationUrl ?? url('/email/verify?user=' . $user->id);
+    }
+
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Confirmez votre adresse email',
+            subject: 'Vérification de votre adresse email - MicroCredit',
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.verify-email',
+            view: 'emails.verify-email', //  Vérifier que cette vue existe
             with: [
-                'url' => url('/verify-email/' . $this->user->id),
-            ],
+                'userName' => $this->user->name,
+                'verificationUrl' => $this->verificationUrl,
+                'appName' => config('app.name'),
+            ]
         );
     }
 }

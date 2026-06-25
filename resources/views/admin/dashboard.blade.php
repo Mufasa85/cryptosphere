@@ -31,7 +31,9 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Volume mensuel</h5>
-                <canvas id="monthlyChart"></canvas>
+                 <div style="position: relative; height: 220px; width: 100%;">
+                   <canvas id="monthlyChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -39,7 +41,9 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Répartition par statut</h5>
-                <canvas id="statusChart"></canvas>
+                <div style="position: relative; height: 220px; width: 100%;">
+                    <canvas id="statusChart"></canvas>
+                </div>
             </div>
         </div>
     </div>

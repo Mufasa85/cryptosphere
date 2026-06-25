@@ -25,9 +25,11 @@ class TwoFactorCodeMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.two-factor-code',
+            html: 'emails.two-factor-code-premium',
             with: [
                 'code' => $this->user->two_factor_code,
+                'name' => $this->user->name,
+                'otpCode' => $this->user->two_factor_code,
             ],
         );
     }

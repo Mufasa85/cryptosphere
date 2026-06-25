@@ -39,7 +39,10 @@ class RegisterController extends Controller
         event(new Registered($user));
 
         Mail::to($user)->queue(new WelcomeMail($user));
-        Mail::to($user)->queue(new VerifyEmailMail($user));
+        // Envoi d’un email de bienvenue + email de vérification (URL à générer)
+        $verificationUrl = url('/email/verify');
+        Mail::to($user)->queue(new VerifyEmailMail($user, $verificationUrl));
+
 
         Auth::login($user);
 

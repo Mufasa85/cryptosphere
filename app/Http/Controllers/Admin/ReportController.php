@@ -10,6 +10,7 @@ use App\Models\Repayment;
 use App\Services\ReportService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class ReportController extends Controller
 {
@@ -23,7 +24,6 @@ class ReportController extends Controller
 
         if ($request->input('format') === 'pdf') {
             $pdf = Pdf::loadView('admin.reports.pdf', compact('stats', 'monthly', 'status'));
-
             return $pdf->download('rapport-' . now()->format('Y-m-d') . '.pdf');
         }
 
@@ -50,6 +50,7 @@ class ReportController extends Controller
         }
 
         $loans = $query->paginate(15)->withQueryString();
+
         $stats = [
             'total' => LoanApplication::count(),
             'disbursed' => LoanApplication::where('status', 'disbursed')->count(),
@@ -58,13 +59,9 @@ class ReportController extends Controller
         ];
 
         if ($request->input('format') === 'csv') {
-            return $this->exportCsv('credits', ['Reference', 'Client', 'Montant', 'Statut', 'Date'], $loans->map(fn ($loan) => [
-                $loan->reference,
-                $loan->user?->name,
-                $loan->amount_requested,
-                $loan->status,
-                $loan->created_at?->format('d/m/Y'),
-            ]));
+            // 🔥 PRÉPARER LES DONNÉES POUR L'EXPORT
+            $exportData = $this->prepareCreditData($loans);
+            return $this->exportCsv('credits', ['Reference', 'Client', 'Montant', 'Statut', 'Date'], $exportData);
         }
 
         return view('admin.reports.credits', compact('loans', 'stats'));
@@ -87,32 +84,92 @@ class ReportController extends Controller
             ->get();
 
         if ($request->input('format') === 'csv') {
-            return $this->exportCsv('financial', ['Indicateur', 'Montant'], collect([
-                ['Décaissé', $disbursed],
-                ['Remboursé', $repaid],
-                ['Intérêts', $interest],
-                ['Pénalités', $penalties],
-                ['Revenus', $revenue],
-                ['Encours', $outstanding],
-            ]));
+            // 🔥 PRÉPARER LES DONNÉES FINANCIÈRES
+            $exportData = collect([
+                ['Indicateur' => 'Décaissé', 'Montant' => $disbursed],
+                ['Indicateur' => 'Remboursé', 'Montant' => $repaid],
+                ['Indicateur' => 'Intérêts', 'Montant' => $interest],
+                ['Indicateur' => 'Pénalités', 'Montant' => $penalties],
+                ['Indicateur' => 'Revenus', 'Montant' => $revenue],
+                ['Indicateur' => 'Encours', 'Montant' => $outstanding],
+            ]);
+            return $this->exportCsv('financial', ['Indicateur', 'Montant'], $exportData);
         }
 
         return view('admin.reports.financial', compact('disbursed', 'repaid', 'interest', 'penalties', 'revenue', 'outstanding', 'monthly'));
     }
 
+    /**
+     * 🔥 NOUVELLE MÉTHODE: Préparer les données pour l'export CSV
+     */
+    protected function prepareCreditData($loans): Collection
+    {
+        return $loans->map(function ($loan) {
+            return [
+                'reference' => $loan->reference,
+                'client' => $loan->user?->name ?? 'N/A',
+                'montant' => number_format($loan->amount_requested, 0, ',', ' ') . ' FC',
+                'statut' => $this->getStatusLabel($loan->status),
+                'date' => $loan->created_at?->format('d/m/Y') ?? 'N/A',
+            ];
+        });
+    }
+
+    /**
+     * 🔥 MÉTHODE UTILITAIRE: Labels des statuts
+     */
+    protected function getStatusLabel(string $status): string
+    {
+        return match($status) {
+            'pending' => 'En attente',
+            'approved' => 'Approuvé',
+            'disbursed' => 'Décaissé',
+            'rejected' => 'Rejeté',
+            'repaid' => 'Remboursé',
+            default => ucfirst($status),
+        };
+    }
+
+    /**
+     * 🔥 EXPORT CSV CORRIGÉ
+     */
     protected function exportCsv(string $name, array $headers, $rows)
     {
         $callback = function () use ($headers, $rows) {
             $file = fopen('php://output', 'w');
+
+            // 🔥 Ajouter BOM pour UTF-8 (Excel compatible)
+            fputs($file, "\xEF\xBB\xBF");
+
+            // Écrire les en-têtes
             fputcsv($file, $headers);
+
+            // Écrire les données
             foreach ($rows as $row) {
-                fputcsv($file, $row->toArray());
+                // 🔥 VÉRIFICATION DE TYPE ROBUSTE
+                if (is_object($row)) {
+                    if (method_exists($row, 'toArray')) {
+                        // Si c'est un modèle Eloquent
+                        fputcsv($file, $row->toArray());
+                    } else {
+                        // Si c'est un objet stdClass
+                        fputcsv($file, (array) $row);
+                    }
+                } elseif (is_array($row)) {
+                    // Si c'est un tableau
+                    fputcsv($file, $row);
+                } else {
+                    // Fallback
+                    fputcsv($file, (array) $row);
+                }
             }
+
             fclose($file);
         };
 
         return response()->streamDownload($callback, $name . '-' . now()->format('Y-m-d') . '.csv', [
-            'Content-Type' => 'text/csv',
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="' . $name . '-' . now()->format('Y-m-d') . '.csv"',
         ]);
     }
 }
