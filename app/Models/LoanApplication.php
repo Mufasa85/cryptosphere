@@ -81,6 +81,11 @@ class LoanApplication extends Model
         return $this->hasMany(Penalty::class, 'loan_application_id');
     }
 
+    public function disbursements()
+    {
+        return $this->hasMany(Disbursement::class, 'loan_application_id');
+    }
+
     // ------------------------------------------------------
     // Scopes
     // ------------------------------------------------------

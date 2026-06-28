@@ -35,11 +35,15 @@ return [
         ],
     ],
 
-    'labpay' => [
-        'url' => env('LABPAY_URL', 'https://api.labpay.test'),
-        'api_key' => env('LABPAY_API_KEY'),
-        'secret' => env('LABPAY_SECRET'),
-        'provider' => env('LABPAY_PROVIDER', 'mock'),
+    'mailtrap' => [
+        'token' => env('MAILTRAP_TOKEN', ''),
     ],
 
+    'labpay' => [
+        'url'      => env('LABPAY_URL', 'https://payment.labyrinthe-rdc.com/api/beta/mobile'),
+        'api_key'  => env('LABPAY_API_KEY'),
+        'secret'   => env('LABPAY_SECRET'),
+        'currency' => env('LABPAY_CURRENCY', 'CDF'),
+        'driver'   => env('LABPAY_PROVIDER', 'mock'),
+    ],
 ];

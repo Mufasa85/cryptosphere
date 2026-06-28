@@ -6,8 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\LoanApplication;
 use App\Models\Repayment;
-use App\Services\MobileMoney\LabPayService;
-use App\Services\MobileMoney\MockService;
+use App\Services\MobileMoney\PaymentGatewayInterface;
 use App\Services\RepaymentService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -17,6 +16,7 @@ class RepaymentController extends Controller
 {
     public function __construct(
         protected RepaymentService $repaymentService,
+        protected PaymentGatewayInterface $gateway,
     ) {}
 
     public function index()
@@ -57,28 +57,24 @@ class RepaymentController extends Controller
                 $data['mobile_number']
             );
 
-            $gateway = config('services.labpay.provider') === 'labpay'
-                ? app(LabPayService::class)
-                : app(MockService::class);
-
-            $response = $gateway->initiate(
+            $response = $this->gateway->initiate(
                 $repayment->mobile_number,
                 (float) $repayment->amount,
-                $repayment->id
+                (string) $repayment->id
             );
 
             $repayment->transactions()->create([
-                'provider' => $response['provider'] ?? 'mock',
+                'provider'           => $response['provider'] ?? 'mock',
                 'provider_reference' => $response['provider_reference'] ?? null,
-                'request_payload' => [
-                    'amount' => $repayment->amount,
+                'request_payload'    => [
+                    'amount'        => $repayment->amount,
                     'mobile_number' => $repayment->mobile_number,
                 ],
-                'response_payload' => $response,
-                'status' => $gateway->isSuccess($response) ? 'success' : 'failed',
+                'response_payload'   => $response,
+                'status'             => $this->gateway->isSuccess($response) ? 'success' : 'failed',
             ]);
 
-            if ($gateway->isSuccess($response)) {
+            if ($this->gateway->isSuccess($response)) {
                 $this->repaymentService->confirm($repayment);
                 ActivityLog::record('repayment.confirmed', $repayment, 'Remboursement confirmé');
             }

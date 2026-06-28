@@ -76,4 +76,13 @@ class LoanService
 
         $this->createSchedule($loan);
     }
+
+    public function confirmDisbursement(LoanApplication $loan): void
+    {
+        $loan->update(['status' => 'running']);
+
+        if ($loan->schedules()->count() === 0) {
+            $this->createSchedule($loan);
+        }
+    }
 }

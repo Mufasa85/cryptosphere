@@ -37,6 +37,12 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [RegisterController::class, 'register'])->name('register.post');
     Route::get('forgot-password', [ForgotPasswordController::class, 'showForm'])->name('password.request');
     Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+
+    // Password reset routes expected by the Password facade
+    Route::get('password/reset/{token}', function () {
+        // If you already have a reset view/controller, wire it here.
+        abort(404);
+    })->name('password.reset');
 });
 
 Route::middleware('auth')->group(function () {
