@@ -46,6 +46,14 @@ class RepaymentController extends Controller
 
         $loan = LoanApplication::findOrFail($data['loan_application_id']);
 
+        if (! $loan->schedules()->unpaid()->exists()) {
+            return back()->withErrors(['loan' => 'Ce crédit est entièrement remboursé. Aucun paiement supplémentaire n\'est nécessaire.']);
+        }
+
+        if ($loan->repayments()->whereIn('status', ['pending', 'processing'])->exists()) {
+            return back()->withErrors(['loan' => 'Un remboursement est déjà en cours de traitement pour ce crédit.']);
+        }
+
         $repayment = $loan->repayments()->create([
             'user_id' => $loan->user_id,
             'loan_schedule_id' => $loan->schedules()->unpaid()->first()?->id,

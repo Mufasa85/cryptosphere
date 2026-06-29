@@ -13,7 +13,7 @@ class RateLimitLoanApplications
     {
         $key = 'loan-application:' . optional($request->user())->id ?: $request->ip();
 
-        if (RateLimiter::tooManyAttempts($key, 5)) {
+        if (RateLimiter::tooManyAttempts($key, 15)) {
             return redirect()->back()->withErrors([
                 'limit' => 'Trop de demandes de crédit. Veuillez réessayer dans 24 heures.',
             ]);

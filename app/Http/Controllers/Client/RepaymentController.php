@@ -45,6 +45,14 @@ class RepaymentController extends Controller
             abort(403);
         }
 
+        if (! $loan->schedules()->unpaid()->exists()) {
+            return back()->withErrors(['loan' => 'Ce crédit est entièrement remboursé. Aucun paiement supplémentaire n\'est nécessaire.']);
+        }
+
+        if ($loan->repayments()->whereIn('status', ['pending', 'processing'])->exists()) {
+            return back()->withErrors(['loan' => 'Un remboursement est déjà en cours de traitement pour ce crédit. Veuillez patienter avant d\'en soumettre un nouveau.']);
+        }
+
         $data = $request->validate([
             'amount' => ['required', 'numeric', 'min:1'],
             'mobile_number' => ['required', 'string', 'max:20'],
